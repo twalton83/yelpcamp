@@ -15,6 +15,18 @@ var campgrounds =  [
     {
         name: "Mountain Goats Rest",
         image: "https://koa.com/blog/images/solo-camping-tips.jpg"
+    },
+    {
+        name: "Salmon Creek",
+        image: "https://koa.com/blog/images/solo-camping-tips.jpg"
+    },
+    {
+        name: "Granite Hill",
+        image: "https://koa.com/blog/images/solo-camping-tips.jpg"
+    },
+    {
+        name: "Mountain Goats Rest",
+        image: "https://koa.com/blog/images/solo-camping-tips.jpg"
     } 
 ]
 
