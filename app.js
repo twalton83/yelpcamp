@@ -55,9 +55,11 @@ app.get("/campgrounds/new", function(req,res){
 app.post("/campgrounds", function (req,res){
     let name = req.body.name;
     let image = req.body.image;
+    let desc = req.body.description;
     let newCampground = {
         name : name,
-        image : image
+        image : image,
+        description: desc
     };
    //create a new campground and save to database
     Campground.create(newCampground, function(err, newlyCreated){
@@ -81,7 +83,7 @@ app.get("/campgrounds/:id", function(req,res){
             console.log(err);
                 } else {
                       //render show template with the campground
-                    res.render("show", {campgrounßd: foundCampground})
+                    res.render("show", {campground: foundCampground})
                 }
     });
   
