@@ -81,7 +81,7 @@ app.get("/campgrounds/:id", function(req,res){
             console.log(err);
                 } else {
                       //render show template with the campground
-                    res.render("show", {campground: foundCampground})
+                    res.render("show", {campgrounßd: foundCampground})
                 }
     });
   
