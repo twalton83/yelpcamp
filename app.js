@@ -5,7 +5,9 @@ const mongoose = require('mongoose');
 const Campground = require('./models/campground.js');
 const Comment = require('./models/comments.js')
 const User = require('./models/users.js')
+const seedDB = require("./seeds.js")
 
+seedDB();
 mongoose.connect("mongodb://localhost:27017/yelp_camp", {useNewUrlParser : true})
 app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine', "ejs");
