@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Campground = require("./models/campground")
+const Comment = require("./models/comments")
 let data = [
     {
         name: "Cloud's Rest",
@@ -20,40 +21,38 @@ let data = [
 
 function seedDB(){
     //Remove all campgrounds
-    Campground.remove({}, function(err){
-        if (err){
-            console.log(err)
-        }
-            console.log("removed campgrounds!")
-            data.forEach(function(seed){
-                Campground.create(seed, function(err, data){
-                    if(err){
-                        console.log(err)
-                    }else {
-                        console.log("added campground")
-
-                        //create comment
-                        Comment.create({
-                            text: "how great",
-                            author: "Tati"
-                        },function(err, comment){
-                            if (err){
-                                console.log(err)
-                            } else {
-                                Campground.comments.push(comment);
-                                Campground.save()
-                                console.log("created new comment")
-                            }
-                        }
-                        )
-                    }
-                });
-            });
-    });
-    //add a few campgrounds
-
-    //add a few comments
-}
+    Campground.deleteMany({}, function(err){
+         if(err){
+             console.log(err);
+         }
+         console.log("removed campgrounds!");
+          //add a few campgrounds
+         data.forEach(function(seed){
+             Campground.create(seed, function(err, campground){
+                 if(err){
+                     console.log(err)
+                 } else {
+                     console.log("added a campground");
+                     //create a comment
+                     Comment.create(
+                         {
+                             text: "This place is great, but I wish there was internet",
+                             author: "Homer"
+                         }, function(err, comment){
+                             if(err){
+                                 console.log(err);
+                             } else {
+                                 campground.comments.push(comment);
+                                 campground.save();
+                                 console.log("Created new comment");
+                             }
+                         });
+                 }
+             });
+         });
+     }); 
+     //add a few comments
+ }
 
 module.exports = seedDB
 

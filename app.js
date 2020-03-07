@@ -7,10 +7,12 @@ const Comment = require('./models/comments.js')
 const User = require('./models/users.js')
 const seedDB = require("./seeds.js")
 
-seedDB();
 mongoose.connect("mongodb://localhost:27017/yelp_camp", {useNewUrlParser : true})
 app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine', "ejs");
+
+seedDB();
+
 
 Campground.create(
     function(err, campground){
@@ -37,14 +39,14 @@ app.get("/campgrounds", function(req,res){
         if(err){
             console.log(err);
         } else {
-            res.render("index", {campgrounds:allCampgrounds})
+            res.render("campgrounds/index", {campgrounds:allCampgrounds})
         }
     })
    // res.render("campgrounds", {campgrounds:campgrounds});
 });
 
 app.get("/campgrounds/new", function(req,res){
-    res.render("new.ejs")
+    res.render("campgrounds/new")
 })
 
 app.post("/campgrounds", function (req,res){
@@ -73,13 +75,26 @@ app.post("/campgrounds", function (req,res){
 //shows more info about one campground 
 app.get("/campgrounds/:id", function(req,res){
     //find the campground with provided ID
-    Campground.findById(req.params.id, function(err, foundCampground) {
+    Campground.findById(req.params.id).populate('comments').exec(function(err, foundCampground) {
         if(err){
             console.log(err);
                 } else {
                       //render show template with the campground
-                    res.render("show", {campground: foundCampground})
+                    res.render("campgrounds/show", {campground: foundCampground})
                 }
+    });
+  
+})
+
+// COMMENTS ROUTES
+app.get("/campgrounds/:id/comments/new", function(req,res){
+    //find campground by ID
+    Campground.findById(req.params.id, function(err, campground){
+        if (err){
+            console.log(err)
+        } else{
+            res.render("comments/new", {campground: campground})
+        }
     });
   
 })
