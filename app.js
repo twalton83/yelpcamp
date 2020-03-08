@@ -7,12 +7,12 @@ const Comment = require('./models/comments.js')
 const User = require('./models/users.js')
 const seedDB = require("./seeds.js")
 
-mongoose.connect("mongodb://localhost:27017/yelp_camp", {useNewUrlParser : true})
+mongoose.connect("mongodb://localhost:27017/yelp_camp", {useNewUrlParser : true, useUnifiedTopology: true })
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.static(__dirname + "/public"))
 app.set('view engine', "ejs");
-
+// uses the seedDB function defined within the seed file
 seedDB();
-
 
 Campground.create(
     function(err, campground){
@@ -98,7 +98,29 @@ app.get("/campgrounds/:id/comments/new", function(req,res){
     });
   
 })
+app.post("/campgrounds/:id/comments", function (req,res){
+    //lookup campground using ID
+    Campground.findById(req.params.id, function(err, campground){
+          //create new comment
+        if(err){
+            console.log(err);
+            redirect("/campgrounds");
+        } else {
+        Comment.create(req.body.comment, function(err, comment){
+            if(err){
+                console.log(err)
+            } else {
+                //connect comment to campground
+                campground.comments.push(comment)
+                campground.save();
+                //redirect campground show pag
+                res.redirect("/campgrounds/" + campground._id)
+            }
+        })
+    }  
+})
+});
 
 app.listen(5500, process.env.IP, function(){
     console.log("the YelpCamp Server")
-});
+})
